@@ -1,9 +1,9 @@
-export default function Adapter($rootScope, $parse, $attr, viewport, buffer, adjustBuffer, element) {
+export default function Adapter(adapterService, $rootScope, $parse, $attr, viewport, buffer, adjustBuffer, element) {
   const viewportScope = viewport.scope() || $rootScope;
   let disabled = false;
   let self = this;
 
-  createValueInjector('adapter')(self);
+  createValueInjector('adapter')(this);
   let topVisibleInjector = createValueInjector('topVisible');
   let topVisibleElementInjector = createValueInjector('topVisibleElement');
   let topVisibleScopeInjector = createValueInjector('topVisibleScope');
@@ -81,6 +81,10 @@ export default function Adapter($rootScope, $parse, $attr, viewport, buffer, adj
       }
     }
   };
+
+  let publicAdapter = adapterService.register($attr['adapter'], this);
+
+  this.dispose = publicAdapter.dispose;
 
   // private function definitions
 

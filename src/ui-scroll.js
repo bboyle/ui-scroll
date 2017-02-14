@@ -1,4 +1,5 @@
 import JQLiteExtras from './modules/jqLiteExtras';
+import AdapterService from './modules/adapterService';
 import ElementRoutines from './modules/elementRoutines.js';
 import ScrollBuffer from './modules/buffer.js';
 import Viewport from './modules/viewport.js';
@@ -10,6 +11,8 @@ angular.module('ui.scroll', [])
   .run(['jqLiteExtras', (jqLiteExtras) =>
     !window.jQuery ? jqLiteExtras.registerFor(angular.element) : null
   ])
+
+  .service('uiScrollAdapter', ['$log', (console) => new AdapterService(console)])
 
   .directive('uiScrollViewport', function () {
     return {
@@ -40,7 +43,8 @@ angular.module('ui.scroll', [])
     '$timeout',
     '$q',
     '$parse',
-    function (console, $injector, $rootScope, $timeout, $q, $parse) {
+    'uiScrollAdapter',
+    function (console, $injector, $rootScope, $timeout, $q, $parse, adapterService) {
 
       return {
         require: ['?^uiScrollViewport'],
@@ -80,7 +84,7 @@ angular.module('ui.scroll', [])
         let elementRoutines = new ElementRoutines($injector, $q);
         let buffer = new ScrollBuffer(elementRoutines, bufferSize);
         let viewport = new Viewport(elementRoutines, buffer, element, viewportController, padding);
-        let adapter = new Adapter($rootScope, $parse, $attr, viewport, buffer, adjustBuffer, element);
+        let adapter = new Adapter(adapterService, $rootScope, $parse, $attr, viewport, buffer, adjustBuffer, element);
 
         if (viewportController) {
           viewportController.adapter = adapter;
@@ -160,6 +164,7 @@ angular.module('ui.scroll', [])
 
         $scope.$on('$destroy', () => {
           unbindEvents();
+          adapter.dispose();
           viewport.unbind('mousewheel', wheelHandler);
         });
 
