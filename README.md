@@ -15,7 +15,7 @@
     - [Examples](#examples)
     - [Install and connect](#install-and-connect)
 - [uiScroll directive](#uiscroll-directive)
-    - [Parametrs](#parametrs)
+    - [Parameters](#parameters)
     - [Datasource](#datasource)
     - [Adapter](#adapter)
 - [uiScrollViewport directive](#uiscrollviewport-directive)
@@ -142,7 +142,7 @@ It is empty since it was deprecated in v1.6.0.
 >{{item}}</div>
 ```
 
-### Parametrs
+### Parameters
  
 * **uiScroll – scroll expression** – The expression indicating how to enumerate a collection. Only one format is currently supported: `variable in datasource` – where variable is the user defined loop variable and datasource is the name of the data source to enumerate.
 * **buffer-size - expression**, optional - number of items requested from the datasource in a single request. The default is 10 and the minimal value is 3
